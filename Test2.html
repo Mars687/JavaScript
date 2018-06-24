@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+</head>
+<body>
+    <button>Change color</button>
+    <script type="text/javascript">
+        var btn = document.querySelector('button');
+
+        function random(number) {
+          return Math.floor(Math.random()*(number));
+        }
+
+        btn.onclick = function() {
+          var rndCol = 'rgb(' + random(255) + ',' + random(255) + ',' + random(255) + ')';
+          document.body.style.backgroundColor = rndCol;
+        }
+    </script>
+</body>
+</html>
