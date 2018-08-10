@@ -232,25 +232,27 @@ var h = 1.01;
 
 console.time('parseInt');
 for (var i = count; i > 0; i--) {
+    
     parseInt(h);
 }
-console.timeEnd('parseInt'); //84.385ms
+console.timeEnd('parseInt');  //81.95ms
 
 console.time('~~');
 for (var i = count; i>0; i--) {
     ~~h;
 }
-console.timeEnd('~~'); //13.386ms
+console.timeEnd('~~'); //18.12ms
 
 
 console.time('arr.indexOf(ele) > -1');
 for (var j = count; j>0; j--) {
     arr.indexOf(ele) > -1;
 }
-console.timeEnd('arr.indexOf(ele) > -1'); //16.263ms
+console.timeEnd('arr.indexOf(ele) > -1'); //45.54ms
 
 console.time('~arr.indexOf(ele)');
 for (var i = count; i>0; i--) {
     ~arr.indexOf(ele);
 }
+console.timeEnd('~arr.indexOf(ele)');  // 36.76ms
 ```
