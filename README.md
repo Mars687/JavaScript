@@ -158,3 +158,99 @@ keyup：用户释放某一个按键是触发。
 init函数并不会在这行代码时就执行，浏览器加载文档时这句话会被加载，会被告知文档加载完要执行哪个函数，但实际上没有当时就执行，等到整个文档加载完成之后才会通过init这个指针去执行init()。
  
 所以一般时候我们都是采用的是无括号的原因。这也是由于括号的二义性，因为括号是“函数调用运算符”，相当于在执行这样一个函数,所以产生的问题在理解了之后也就理解了。
+
+
+### 按位非运算符“~”
+
+先看看w3c的定义：
+
+位运算 NOT 由否定号（~）表示，它是 ECMAScript 中为数不多的与二进制算术有关的运算符之一。
+
+位运算 NOT 是三步的处理过程：
+
+* 把运算数转换成 32 位数字
+
+* 把二进制数转换成它的二进制反码（0->1, 1->0）
+
+* 把二进制数转换成浮点数
+
+简单的理解，对任一数值 x 进行按位非操作的结果为 -(x + 1)
+
+``` javascript
+console.log('~null: ', ~null);       // => -1
+console.log('~undefined: ', ~undefined);  // => -1
+console.log('~0: ', ~0);          // => -1
+console.log('~{}: ', ~{});         // => -1
+console.log('~[]: ', ~[]);         // => -1
+console.log('~(1/0): ', ~(1/0));      // => -1
+console.log('~false: ', ~false);      // => -1
+console.log('~true: ', ~true);       // => -2
+console.log('~1.2543: ', ~1.2543);     // => -2
+console.log('~4.9: ', ~4.9);       // => -5
+console.log('~(-2.999): ', ~(-2.999));   // => 1
+```
+
+那么, ~~x 就为 -(-(x+1) + 1)
+
+``` javascript
+console.log('~~null: ', ~~null);       // => 0
+console.log('~~undefined: ', ~~undefined);  // => 0
+console.log('~~0: ', ~~0);          // => 0
+console.log('~~{}: ', ~~{});         // => 0
+console.log('~~[]: ', ~~[]);         // => 0
+console.log('~~(1/0): ', ~~(1/0));      // => 0
+console.log('~~false: ', ~~false);      // => 0
+console.log('~~true: ', ~~true);       // => 1
+console.log('~~1.2543: ', ~~1.2543);     // => 1
+console.log('~~4.9: ', ~~4.9);       // => 4
+console.log('~~(-2.999): ', ~~(-2.999));   // => -2
+```
+
+#### ~value的使用
+判断数值中是否有某元素时，以前这样判断：
+
+>     if(arr.indexOf(ele) > -1){...} //易读
+现在可以这样判断，两者效率：
+
+>     if(~arr.indexOf(ele)){...} //简洁
+
+#### ~~value的使用
+
+对于浮点数，~~value可以代替parseInt(value)，而且前者效率更高些
+
+>     parseInt(-2.99) //-2
+>     ~~(-2.99) //-2
+
+测试
+
+``` javascript
+var time1 = +new Date();
+var count = 5000000;
+var ele = 1;
+var arr = [1,2,4,5,2];
+var h = 1.01;
+
+console.time('parseInt');
+for (var i = count; i > 0; i--) {
+    parseInt(h);
+}
+console.timeEnd('parseInt'); //84.385ms
+
+console.time('~~');
+for (var i = count; i>0; i--) {
+    ~~h;
+}
+console.timeEnd('~~'); //13.386ms
+
+
+console.time('arr.indexOf(ele) > -1');
+for (var j = count; j>0; j--) {
+    arr.indexOf(ele) > -1;
+}
+console.timeEnd('arr.indexOf(ele) > -1'); //16.263ms
+
+console.time('~arr.indexOf(ele)');
+for (var i = count; i>0; i--) {
+    ~arr.indexOf(ele);
+}
+```
